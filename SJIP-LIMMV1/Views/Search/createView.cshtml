@@ -1,0 +1,235 @@
+﻿@model  SJIP_LIMMV1.Models.SearchViewModel
+@{
+    ViewBag.Title = "createView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .validationError {
+        color: red;
+    }
+</style>
+<head>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    @*<script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+
+</head>
+
+<body>
+    <div class="container body-content">
+
+
+
+
+        <div class="container">
+
+
+
+            <div class="row justify-content-start" style="padding-top:10px;">
+                <h1>Search Info</h1>
+            </div>
+
+            <form id="myForm">
+                <div class="col-sm-12">
+
+                    <div class="col-sm-6" style="padding-top:10px;">
+
+                        <div class="col-sm-12">
+
+                            <div class="col-sm-3" style="padding-top:15px;">
+                                @Html.LabelFor(x => x.TownCouncil)
+                            </div>
+                            <div class="col-sm-9" style="padding-top:5px;">
+                                @Html.TextBoxFor(x => x.TownCouncil)
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            @Html.ValidationMessageFor(x => x.TownCouncil, "", new { @class = "validationError" })
+                        </div>
+
+                        <div class="col-sm-12">
+
+                            <div class="col-sm-3" style="padding-top:15px;">
+                                @Html.LabelFor(x => x.Block)
+                            </div>
+                            <div class="col-sm-9" style="padding-top:5px;">
+                                @Html.TextBoxFor(x => x.Block)
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-12">
+                            @Html.ValidationMessageFor(x => x.Block, "", new { @class = "validationError" })
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6" style="padding-top:10px;">
+
+                        <div class="col-sm-12">
+
+                            <div class="col-sm-3" style="padding-top:15px;">
+                                @Html.LabelFor(x => x.SIMCard)
+                            </div>
+                            <div class="col-sm-9" style="padding-top:5px;">
+                                @Html.TextBoxFor(x => x.SIMCard)
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            @Html.ValidationMessageFor(x => x.SIMCard, "", new { @class = "validationError" })
+                        </div>
+
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-3" style="padding-top:15px;">
+                                @Html.LabelFor(x => x.LMPD)
+                            </div>
+                            <div class="col-sm-9" style="padding-top:5px;">
+                                @Html.TextBoxFor(x => x.LMPD)
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            @Html.ValidationMessageFor(x => x.LMPD, "", new { @class = "validationError" })
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-sm-12">
+                    <span style="padding-top:10px;padding-bottom:10px; ">
+
+                        <input type="button" id="search" value="Search">
+
+                    </span>
+                    <span style="padding-top:10px;padding-bottom:10px; ">
+
+                        <input type="button" id="clear" value="Clear">
+
+                    </span>
+                </div>
+            </form>
+            <div class="col-sm-12" id="resultTable" style="padding-top:10px;">
+                @Html.Partial("_SearchResult", Model)
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+<script>
+    function pageSizeChange() {
+        var pageSize = $("#PagedSensorBoxInfo_PageSize").val();
+        $.ajax({
+            url: "/Search/pagedResult?size=" + pageSize + "&page=",
+            type: 'GET',
+            cache: false,          
+
+            success: function (result) {
+                debugger;
+                $("#resultTable").html(result);//use returned data to render data table 
+            },
+            error: function () {
+                alert("DropdownList ajax error")
+            }
+        });
+    }
+
+    $(document).ready(function () {//jQuery used to direct each page number click to pagedResult action(searchController) and get back a partial view of data table
+        $(document).on("click", "#contentPager a", function (e) {
+            var page;
+            //first check if user click the "next"/"prev" link
+            if ($(this).attr("rel") === "next") {
+                page = parseInt($(this).attr("href").split('=')[1]);
+            }
+            else if ($(this).attr("rel") === "prev") {
+                page = parseInt($(this).attr("href").split('=')[1]);
+            }
+            else
+            {
+                page = parseInt($(this).html());//get page number of the link later pass this param to controller   
+                
+            }
+            var pageSize = parseInt($("select[name*='PagedSensorBoxInfo.PageSize']").val());
+
+            $.ajax({
+                url: "/Search/pagedResult?size=" + pageSize + "&page=" + page,
+                type: 'GET',
+                cache: false,
+                data: { 'size': pageSize, 'page': page },
+
+                success: function (result) {
+                    debugger;
+                    $("#resultTable").html(result);//use returned data to render data table 
+                },
+                error: function () {
+
+                    alert("Page Link ajax Error")
+                }
+            });
+            e.preventDefault();//disable default click event in order to only trigger ajax
+        });     
+    });
+
+    $("#search").click(function () {
+        var form = $("#myForm");
+
+        var data = form.serialize();//must serialize form in order to retrieve send all textBox data at one-go
+
+        //validate form data before send to controller
+        if (!$("#myForm").valid()) {
+
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Search/submitSearch",
+            data: data,
+            success: function (result) {
+                debugger;
+                $("#resultTable").html(result);//use returned data to render data table 
+                
+            },
+            error: function () {
+
+                alert("search click ajax error")
+            }
+        });
+
+    });
+
+    $("#clear").click(function () {
+        $("#myForm").find("input[type=text], textarea").val("");//clear all search input field
+
+        var form = $("#myForm");
+
+        var data = form.serialize();//must serialize form in order to retrieve send all textBox data at one-go
+
+        //validate form data before send to controller
+        if (!$("#myForm").valid()) {
+
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Search/submitSearch",
+            data: data,
+            success: function (result) {
+                debugger;
+                $("#resultTable").html(result);//use returned data to render data table 
+            },
+            error: function () {
+
+                alert("search click ajax error")
+            }
+        });
+
+    });
+</script>
