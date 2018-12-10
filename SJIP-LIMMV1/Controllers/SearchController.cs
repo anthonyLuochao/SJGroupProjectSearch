@@ -7,73 +7,47 @@ using System.Web;
 using System.Web.Mvc;
 using SJIP_LIMMV1.Models;
 using PagedList;
+using AutoMapper;
+using SJIP_LIMMV1;
+using SJIP_LIMMV1.Services;
 
 namespace SJIP_LIMMV1.Controllers
 {
     public class SearchController : Controller
     {
         LiftInstallationDataDBEntities1 db = new LiftInstallationDataDBEntities1();
-        static List<SensorBoxInfo> currentSensorBoxInfoList;//current search returned result
+        static SearchViewModel currentSearchField=new SearchViewModel();//current search returned result
+        SearchViewModel searchViewModel;
+
+        ISearchService searchService=new SearchServiceImpl();
+
+        
 
         // GET: Search
         public ActionResult createView()
-        {                       
-            SearchViewModel searchViewModel = new SearchViewModel();
-
-            currentSensorBoxInfoList = db.SensorBoxInfoes.ToList();
-
-            //set initial page number and size            
-            PagedList<SensorBoxInfo> pagedModel = new PagedList<SensorBoxInfo>(currentSensorBoxInfoList, searchViewModel.defaultPageNumber, searchViewModel.defaultPageSize);
-
-            searchViewModel.PagedSensorBoxInfo = pagedModel;    
+        {
+            searchViewModel = new SearchViewModel();
+            currentSearchField = searchViewModel;
+            searchViewModel.PagedSensorBoxInfo = searchService.LoadInitSearchPage();
             return View(searchViewModel);
         }
 
         [HttpPost]        
-        public ActionResult submitSearch(SearchViewModel searchViewModel)
+        public ActionResult submitSearch(SearchViewModel searchfield)
         {
-           
-                var sensorBoxInfo = db.SensorBoxInfoes.ToList();
-
-
-                if (searchViewModel.Block != null)
-                {
-                    sensorBoxInfo = sensorBoxInfo.Where(x => (x.BlockNo.ToString()).StartsWith((searchViewModel.Block.ToString().Trim()))).ToList();
-                }
-                if (searchViewModel.TownCouncil != null)
-                {
-                    sensorBoxInfo = sensorBoxInfo.Where(x => x.TownCouncil.ToLower().Contains(searchViewModel.TownCouncil.Trim().ToLower())).ToList();
-                }
-                if (searchViewModel.SIMCard != null)
-                {
-                    sensorBoxInfo = sensorBoxInfo.Where(x => x.SIMCard.ToLower().StartsWith(searchViewModel.SIMCard.Trim().ToLower())).ToList();
-                }
-                if (searchViewModel.LMPD != null)
-                {
-                    sensorBoxInfo = sensorBoxInfo.Where(x => x.LMPD.ToLower().StartsWith(searchViewModel.LMPD.Trim().ToLower())).ToList();
-                }
-
-
-                currentSensorBoxInfoList = sensorBoxInfo;
-
-                searchViewModel.PagedSensorBoxInfo = new PagedList<SensorBoxInfo>(currentSensorBoxInfoList, searchViewModel.defaultPageNumber, searchViewModel.defaultPageSize);
-
-                return PartialView("_SearchResult", searchViewModel);
-                
+            searchViewModel = new SearchViewModel();
+            currentSearchField = searchfield;
+            searchViewModel.PagedSensorBoxInfo= searchService.SearchByAllField(null,null, searchfield);  
+            return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);                
             
         }
 
         [HttpGet]
-        public ActionResult pagedResult(int size, int? page)
+        public ActionResult pagedResult(int? page, int? size)
         {
-
-            SearchViewModel searchViewModel = new SearchViewModel();
-
-            int pageNumber = (page ?? 1);
-          
-            searchViewModel.PagedSensorBoxInfo = new PagedList<SensorBoxInfo>(currentSensorBoxInfoList, pageNumber, size);
-
-            return PartialView("_SearchResult", searchViewModel);           
+            searchViewModel = new SearchViewModel();
+            searchViewModel.PagedSensorBoxInfo = searchService.SearchByAllField(page, size, currentSearchField);
+            return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);           
         }
 
 

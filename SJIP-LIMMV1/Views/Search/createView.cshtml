@@ -1,4 +1,5 @@
-﻿@model  SJIP_LIMMV1.Models.SearchViewModel
+﻿@using PagedList.Mvc;
+@model  SJIP_LIMMV1.Models.SearchViewModel
 @{
     ViewBag.Title = "createView";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,7 +13,7 @@
 <head>
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     @*<script src="~/Scripts/jquery.validate.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
 
 </head>
 
@@ -38,7 +39,7 @@
                         <div class="col-sm-12">
 
                             <div class="col-sm-3" style="padding-top:15px;">
-                                @Html.LabelFor(x => x.TownCouncil)
+                                @Html.LabelFor(x=>x.TownCouncil)
                             </div>
                             <div class="col-sm-9" style="padding-top:5px;">
                                 @Html.TextBoxFor(x => x.TownCouncil)
@@ -114,7 +115,7 @@
                 </div>
             </form>
             <div class="col-sm-12" id="resultTable" style="padding-top:10px;">
-                @Html.Partial("_SearchResult", Model)
+                @Html.Partial("_SearchResult", Model.PagedSensorBoxInfo)
             </div>
         </div>
 
@@ -122,25 +123,27 @@
     </div>
 </body>
 
-<script>
-    function pageSizeChange() {
-        var pageSize = $("#PagedSensorBoxInfo_PageSize").val();
+<script> 
+    function changePage() {
+        var pageSize = $('#pageSizeDropdownList').val();
+           
         $.ajax({
-            url: "/Search/pagedResult?size=" + pageSize + "&page=",
+            url: "/Search/pagedResult?Size=" + pageSize,
             type: 'GET',
-            cache: false,          
+            cache: false,
 
             success: function (result) {
                 debugger;
-                $("#resultTable").html(result);//use returned data to render data table 
+                $("#resultTable").html(result);//use returned data to render data table
             },
             error: function () {
                 alert("DropdownList ajax error")
             }
         });
     }
-
-    $(document).ready(function () {//jQuery used to direct each page number click to pagedResult action(searchController) and get back a partial view of data table
+  
+    $(document).ready(function () {
+        //jQuery used to direct each page number click to pagedResult action(searchController) and get back a partial view of data table
         $(document).on("click", "#contentPager a", function (e) {
             var page;
             //first check if user click the "next"/"prev" link
@@ -150,22 +153,22 @@
             else if ($(this).attr("rel") === "prev") {
                 page = parseInt($(this).attr("href").split('=')[1]);
             }
-            else
-            {
-                page = parseInt($(this).html());//get page number of the link later pass this param to controller   
-                
+            else {
+                page = parseInt($(this).html());//get page number of the link later pass this param to controller
+
             }
-            var pageSize = parseInt($("select[name*='PagedSensorBoxInfo.PageSize']").val());
+            
+            var pageSize = $("#pageSizeDropdownList").val();
 
             $.ajax({
-                url: "/Search/pagedResult?size=" + pageSize + "&page=" + page,
+                url: "/Search/pagedResult?page=" + page + "&size=" + pageSize,
                 type: 'GET',
                 cache: false,
                 data: { 'size': pageSize, 'page': page },
 
                 success: function (result) {
                     debugger;
-                    $("#resultTable").html(result);//use returned data to render data table 
+                    $("#resultTable").html(result);//use returned data to render data table
                 },
                 error: function () {
 
@@ -173,63 +176,65 @@
                 }
             });
             e.preventDefault();//disable default click event in order to only trigger ajax
-        });     
-    });
-
-    $("#search").click(function () {
-        var form = $("#myForm");
-
-        var data = form.serialize();//must serialize form in order to retrieve send all textBox data at one-go
-
-        //validate form data before send to controller
-        if (!$("#myForm").valid()) {
-
-            return false;
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/Search/submitSearch",
-            data: data,
-            success: function (result) {
-                debugger;
-                $("#resultTable").html(result);//use returned data to render data table 
-                
-            },
-            error: function () {
-
-                alert("search click ajax error")
-            }
         });
 
-    });
+        
 
-    $("#clear").click(function () {
-        $("#myForm").find("input[type=text], textarea").val("");//clear all search input field
+        $("#search").click(function () {
+            var form = $("#myForm");
 
-        var form = $("#myForm");
+            var data = form.serialize();//must serialize form in order to retrieve send all textBox data at one-go
 
-        var data = form.serialize();//must serialize form in order to retrieve send all textBox data at one-go
+            //validate form data before send to controller
+            if (!$("#myForm").valid()) {
 
-        //validate form data before send to controller
-        if (!$("#myForm").valid()) {
-
-            return false;
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/Search/submitSearch",
-            data: data,
-            success: function (result) {
-                debugger;
-                $("#resultTable").html(result);//use returned data to render data table 
-            },
-            error: function () {
-
-                alert("search click ajax error")
+                return false;
             }
+
+            $.ajax({
+                type: "POST",
+                url: "/Search/submitSearch",
+                data: data,
+                success: function (result) {
+                    debugger;
+                    $("#resultTable").html(result);//use returned data to render data table
+
+                },
+                error: function () {
+
+                    alert("search click ajax error")
+                }
+            });
+
         });
 
+        $("#clear").click(function () {
+            $("#myForm").find("input[type=text], textarea").val("");//clear all search input field
+
+            var form = $("#myForm");
+
+            var data = form.serialize();//must serialize form in order to retrieve send all textBox data at one-go
+
+            //validate form data before send to controller
+            if (!$("#myForm").valid()) {
+
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Search/submitSearch",
+                data: data,
+                success: function (result) {
+                    debugger;
+                    $("#resultTable").html(result);//use returned data to render data table
+                },
+                error: function () {
+
+                    alert("search click ajax error")
+                }
+            });
+
+        });
     });
 </script>

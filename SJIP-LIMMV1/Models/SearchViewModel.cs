@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using PagedList;
+using SJIP_LIMMV1.Helper;
 
 namespace SJIP_LIMMV1.Models
 {
@@ -35,27 +36,7 @@ namespace SJIP_LIMMV1.Models
         [RegularExpression(regExrLMPD, ErrorMessage = "Please enter LMPD number start with 2 letters followed with 10 numbers")]
         public String LMPD { get; set; }
 
-        public int defaultPageNumber { get; set; }
+        public PagedList<SearchDTO> PagedSensorBoxInfo { get; set; }
 
-        public int defaultPageSize { get; set; }
-
-        public List<SensorBoxInfo> SensorBoxInfoRecordList { get; set; }
-        public PagedList<SensorBoxInfo> PagedSensorBoxInfo { get; set; }
-
-
-        public SearchViewModel()
-        {
-            defaultPageNumber = 1;
-            defaultPageSize = 4;
-            TownCouncil = null;
-            SIMCard = null;
-            Block = null;
-            LMPD = null;
-            int pageNumber;
-            pageNumber = 1;
-            SensorBoxInfoRecordList = new List<SensorBoxInfo>();
-            PagedSensorBoxInfo = new PagedList<SensorBoxInfo>(SensorBoxInfoRecordList, pageNumber, 2);
-        }
-      
     }
 }

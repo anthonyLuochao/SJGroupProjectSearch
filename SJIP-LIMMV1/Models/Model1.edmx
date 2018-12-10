@@ -11,11 +11,11 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TownCouncil" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BlockNo" Type="int" Nullable="false" />
           <Property Name="LiftNo" Type="varchar" MaxLength="40" />
           <Property Name="PostalCode" Type="int" />
           <Property Name="SIMCard" Type="varchar" MaxLength="40" />
           <Property Name="LMPD" Type="varchar" MaxLength="40" />
+          <Property Name="BlockNo" Type="varchar" MaxLength="4" />
         </EntityType>
         <EntityContainer Name="LiftInstallationDataDBModelStoreContainer">
           <EntitySet Name="SensorBoxInfo" EntityType="Self.SensorBoxInfo" Schema="dbo" store:Type="Tables" />
@@ -31,13 +31,13 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TownCouncil" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="BlockNo" Type="Int32" Nullable="false" />
           <Property Name="LiftNo" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="PostalCode" Type="Int32" />
           <Property Name="SIMCard" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="LMPD" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="BlockNo" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityContainer Name="LiftInstallationDataDBEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="SensorBoxInfoes" EntityType="Self.SensorBoxInfo" />
         </EntityContainer>
       </Schema>
@@ -45,17 +45,17 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="LiftInstallationDataDBModelStoreContainer" CdmEntityContainer="LiftInstallationDataDBEntities1">
+        <EntityContainerMapping StorageEntityContainer="LiftInstallationDataDBModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="SensorBoxInfoes">
             <EntityTypeMapping TypeName="LiftInstallationDataDBModel.SensorBoxInfo">
               <MappingFragment StoreEntitySet="SensorBoxInfo">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TownCouncil" ColumnName="TownCouncil" />
-                <ScalarProperty Name="BlockNo" ColumnName="BlockNo" />
                 <ScalarProperty Name="LiftNo" ColumnName="LiftNo" />
                 <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
                 <ScalarProperty Name="SIMCard" ColumnName="SIMCard" />
                 <ScalarProperty Name="LMPD" ColumnName="LMPD" />
+                <ScalarProperty Name="BlockNo" ColumnName="BlockNo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -16,10 +16,10 @@ namespace SJIP_LIMMV1.Models
     {
         public int ID { get; set; }
         public string TownCouncil { get; set; }
-        public int BlockNo { get; set; }
         public string LiftNo { get; set; }
         public Nullable<int> PostalCode { get; set; }
         public string SIMCard { get; set; }
         public string LMPD { get; set; }
+        public string BlockNo { get; set; }
     }
 }
