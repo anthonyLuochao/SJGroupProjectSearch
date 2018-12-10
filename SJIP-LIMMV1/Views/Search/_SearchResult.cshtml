@@ -51,5 +51,5 @@ Enumerable.Range(1, 10).Select(i => new SelectListItem { Text = i.ToString(), Va
     </table>
 
     <div id="contentPager" class="col-sm-12" style="text-align:center">
-        <p>@Html.PagedListPager(Model, page => Url.Action("pagedResult", new { page}))</p>
+        <p>@Html.PagedListPager(Model, page => Url.Action("PagedResult", new { page}))</p>
     </div>

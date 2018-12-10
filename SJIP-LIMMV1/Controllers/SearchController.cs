@@ -24,7 +24,7 @@ namespace SJIP_LIMMV1.Controllers
         
 
         // GET: Search
-        public ActionResult createView()
+        public ActionResult CreateView()
         {
             searchViewModel = new SearchViewModel();
             currentSearchField = searchViewModel;
@@ -33,7 +33,7 @@ namespace SJIP_LIMMV1.Controllers
         }
 
         [HttpPost]        
-        public ActionResult submitSearch(SearchViewModel searchfield)
+        public ActionResult SubmitSearch(SearchViewModel searchfield)
         {
             searchViewModel = new SearchViewModel();
             currentSearchField = searchfield;
@@ -43,7 +43,7 @@ namespace SJIP_LIMMV1.Controllers
         }
 
         [HttpGet]
-        public ActionResult pagedResult(int? page, int? size)
+        public ActionResult PagedResult(int? page, int? size)
         {
             searchViewModel = new SearchViewModel();
             searchViewModel.PagedSensorBoxInfo = searchService.SearchByAllField(page, size, currentSearchField);

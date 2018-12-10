@@ -1,7 +1,7 @@
 ﻿@using PagedList.Mvc;
 @model  SJIP_LIMMV1.Models.SearchViewModel
 @{
-    ViewBag.Title = "createView";
+    ViewBag.Title = "CreateView";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -128,7 +128,7 @@
         var pageSize = $('#pageSizeDropdownList').val();
            
         $.ajax({
-            url: "/Search/pagedResult?Size=" + pageSize,
+            url: "/Search/PagedResult?Size=" + pageSize,
             type: 'GET',
             cache: false,
 
@@ -143,7 +143,7 @@
     }
   
     $(document).ready(function () {
-        //jQuery used to direct each page number click to pagedResult action(searchController) and get back a partial view of data table
+        //jQuery used to direct each page number click to PagedResult action(searchController) and get back a partial view of data table
         $(document).on("click", "#contentPager a", function (e) {
             var page;
             //first check if user click the "next"/"prev" link
@@ -161,7 +161,7 @@
             var pageSize = $("#pageSizeDropdownList").val();
 
             $.ajax({
-                url: "/Search/pagedResult?page=" + page + "&size=" + pageSize,
+                url: "/Search/PagedResult?page=" + page + "&size=" + pageSize,
                 type: 'GET',
                 cache: false,
                 data: { 'size': pageSize, 'page': page },
@@ -223,7 +223,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/Search/submitSearch",
+                url: "/Search/SubmitSearch",
                 data: data,
                 success: function (result) {
                     debugger;
