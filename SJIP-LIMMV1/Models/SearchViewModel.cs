@@ -14,7 +14,7 @@ namespace SJIP_LIMMV1.Models
         const string regExrTownCouncil = "^\\s*[a-zA-Z ]{0,30}\\s*$";
 
         //white space at both end of the string will be ignored;first 14 digits must be numbers; 15th digit must be "-" and remaining 4 digits must be number
-        const string regExrSIMCard = "^\\s*[0-9]{0,14}(-){0,1}[0,9]{0,4}\\s*$";
+        const string regExrSIMCard = "^(^\\s*[0-9]{0,14}[-]{0,1}\\s*$)|(^\\s*[0-9]{0,14}[-]{1}[0-9]{0,4}\\s*$)";
 
         //white space at both end of the string will be ignored;first two digit must be letters and remainning 10 digits need to be numbers
         const string regExrLMPD = "(^\\s*[a-zA-Z]{0,1}\\s*$)|(^\\s*[a-zA-Z]{2}[0-9]{0,10}\\s*$)";

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using PagedList;
 using SJIP_LIMMV1.Models;
 using SJIP_LIMMV1.SearchRepository;
+using SJIP_LIMMV1.Helper;
+using System.Collections;
 
 namespace SJIP_LIMMV1.Services
 {
@@ -12,17 +15,18 @@ namespace SJIP_LIMMV1.Services
     {
         ISearchRepo searchRepo = new SearchRepoImpl();
 
-        public PagedList<SearchDTO> LoadInitSearchPage()
+        public async Task<PagedList<SearchDTO>> LoadInitSearchPageAsync()
         {
-            var searchDTO = searchRepo.ConvertQueryResultToSearchDTO(searchRepo.GetAllQeuryResult());
-            return searchRepo.ConvertSearchDTOToPagedList(null,null,searchDTO);
+            IList queryResult = await searchRepo.GetAllQeuryResultAsync();
+            List<SearchDTO> searchDTO = SearchHelper.ConvertQueryResultToSearchDTO(queryResult);
+            return  SearchHelper.ConvertSearchDTOToPagedList(null,null, searchDTO);
         }
 
-        public PagedList<SearchDTO> SearchByAllField(int? pageNumber,int? pageSize,SearchViewModel searchViewModel)
+        public async Task<PagedList<SearchDTO>> SearchByAllFieldAsync(int? pageNumber,int? pageSize,SearchViewModel searchViewModel)
         {
-            var queryResult= searchRepo.GetQueryResultFromSearch(searchViewModel);
-            var searchDTO = searchRepo.ConvertQueryResultToSearchDTO(queryResult);
-            return searchRepo.ConvertSearchDTOToPagedList(pageNumber, pageSize, searchDTO);
+            IList queryResult =await searchRepo.GetQueryResultFromSearchAsync(searchViewModel);
+            var searchDTO = SearchHelper.ConvertQueryResultToSearchDTO(queryResult);
+            return SearchHelper.ConvertSearchDTOToPagedList(pageNumber, pageSize, searchDTO);
         }
     }
 }

@@ -24,29 +24,30 @@ namespace SJIP_LIMMV1.Controllers
         
 
         // GET: Search
-        public ActionResult CreateView()
+        public async Task<ActionResult> CreateView()
         {
             searchViewModel = new SearchViewModel();
+            searchViewModel.PagedSensorBoxInfo =await searchService.LoadInitSearchPageAsync();
             currentSearchField = searchViewModel;
-            searchViewModel.PagedSensorBoxInfo = searchService.LoadInitSearchPage();
+           
             return View(searchViewModel);
         }
 
         [HttpPost]        
-        public ActionResult SubmitSearch(SearchViewModel searchfield)
+        public async Task<ActionResult> SubmitSearch(SearchViewModel searchfield)
         {
             searchViewModel = new SearchViewModel();
             currentSearchField = searchfield;
-            searchViewModel.PagedSensorBoxInfo= searchService.SearchByAllField(null,null, searchfield);  
+            searchViewModel.PagedSensorBoxInfo=await searchService.SearchByAllFieldAsync(null,null, searchfield);  
             return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);                
             
         }
 
         [HttpGet]
-        public ActionResult PagedResult(int? page, int? size)
+        public async Task<ActionResult> PagedResult(int? page, int? size)
         {
             searchViewModel = new SearchViewModel();
-            searchViewModel.PagedSensorBoxInfo = searchService.SearchByAllField(page, size, currentSearchField);
+            searchViewModel.PagedSensorBoxInfo =await  searchService.SearchByAllFieldAsync(page, size, currentSearchField);
             return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);           
         }
 

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Web;
 using SJIP_LIMMV1.Models;
 using PagedList;
+using System.Threading.Tasks;
 
 namespace SJIP_LIMMV1.Services
 {
     public interface ISearchService
     {
-        PagedList<SearchDTO> LoadInitSearchPage();
+        Task<PagedList<SearchDTO>> LoadInitSearchPageAsync();
 
-        PagedList<SearchDTO> SearchByAllField(int? pageNumber, int? pageSize, SearchViewModel searchViewModel);
+        Task<PagedList<SearchDTO>> SearchByAllFieldAsync(int? pageNumber, int? pageSize, SearchViewModel searchViewModel);
     }
 }

@@ -676,6 +676,7 @@
     <Compile Include="Helper\CommonFunc.cs" />
     <Compile Include="Helper\Constant.cs" />
     <Compile Include="Helper\PredicateBuilder.cs" />
+    <Compile Include="Helper\SearchHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DTO\AutoMapperProfile.cs" />
     <Compile Include="Models\IdentityModels.cs" />
