@@ -30,21 +30,22 @@ namespace SJIP_LIMMV1.SearchRepository
             var predicate = PredicateBuilder.True<SensorBoxInfo>();
 
             //check each search field to generate query string
+            //for come cases, an unexpected tab like space will be passed to here so need replace tab to space
             if (searchViewModel.Block != null)
             {
-                predicate = predicate.And(i => (i.BlockNo.ToString()).ToLower().StartsWith(searchViewModel.Block.Trim().ToLower()));
+                predicate = predicate.And(i => (i.BlockNo.ToString()).ToLower().StartsWith(searchViewModel.Block.Replace("\t", " ").Trim().ToLower()));
             }
             if (searchViewModel.TownCouncil != null)
             {
-                predicate = predicate.And(i => i.TownCouncil.ToLower().Contains(searchViewModel.TownCouncil.Trim().ToLower()));
+                predicate = predicate.And(i => i.TownCouncil.ToLower().Contains(searchViewModel.TownCouncil.Replace("\t", " ").Trim().ToLower()));
             }
             if (searchViewModel.SIMCard != null)
             {
-                predicate = predicate.And(i => i.SIMCard.ToLower().StartsWith(searchViewModel.SIMCard.Trim().ToLower()));
+                predicate = predicate.And(i => i.SIMCard.ToLower().StartsWith(searchViewModel.SIMCard.Replace("\t"," ").Trim().ToLower()));
             }
             if (searchViewModel.LMPD != null)
             {
-                predicate = predicate.And(i => i.LMPD.ToLower().StartsWith(searchViewModel.LMPD.Trim().ToLower()));
+                predicate = predicate.And(i => i.LMPD.ToLower().StartsWith(searchViewModel.LMPD.Replace("\t", " ").Trim().ToLower()));
             }
             
             return await db.SensorBoxInfoes.Where(predicate).Select(i => new { i.TownCouncil, i.BlockNo, i.SIMCard, i.LMPD }).ToListAsync();
