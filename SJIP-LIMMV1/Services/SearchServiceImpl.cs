@@ -15,6 +15,20 @@ namespace SJIP_LIMMV1.Services
     {
         ISearchRepo searchRepo = new SearchRepoImpl();
 
+        public async Task<List<SearchDTO>> FindByIDAsync(int id)
+        {
+            IList queryResult = await searchRepo.FindByIDAsync(id);
+            List<SearchDTO> searchDTO = SearchHelper.ConvertQueryResultToSearchDTO(queryResult);
+            return searchDTO;
+        }
+
+        public async Task<List<SearchDTO>> LoadAllAsync()
+        {
+            IList queryResult = await searchRepo.GetAllQeuryResultAsync();
+            List<SearchDTO> searchDTO = SearchHelper.ConvertQueryResultToSearchDTO(queryResult);
+            return searchDTO;
+        }
+
         public async Task<PagedList<SearchDTO>> LoadInitSearchPageAsync()
         {
             IList queryResult = await searchRepo.GetAllQeuryResultAsync();

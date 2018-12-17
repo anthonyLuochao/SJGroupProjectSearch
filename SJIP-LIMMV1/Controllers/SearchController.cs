@@ -11,11 +11,12 @@ using AutoMapper;
 using SJIP_LIMMV1;
 using SJIP_LIMMV1.Services;
 
+
 namespace SJIP_LIMMV1.Controllers
 {
     public class SearchController : Controller
     {
-        LiftInstallationDataDBEntities1 db = new LiftInstallationDataDBEntities1();
+        
         static SearchViewModel currentSearchField=new SearchViewModel();//current search returned result
         SearchViewModel searchViewModel;
 
@@ -27,7 +28,8 @@ namespace SJIP_LIMMV1.Controllers
         public async Task<ActionResult> CreateView()
         {
             searchViewModel = new SearchViewModel();
-            searchViewModel.PagedSensorBoxInfo =await searchService.LoadInitSearchPageAsync();
+            ViewBag.InitPagedList =await searchService.LoadInitSearchPageAsync();       
+            ViewBag.AllRecords= await searchService.LoadAllAsync();
             currentSearchField = searchViewModel;
            
             return View(searchViewModel);
@@ -51,6 +53,14 @@ namespace SJIP_LIMMV1.Controllers
             return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);           
         }
 
+        [HttpGet]
+        public async Task<JsonResult> GetInfoById(int id)
+        {
+            List<SearchDTO> result  =await searchService.FindByIDAsync(id);
+            SearchDTO model = result.First();
+            
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
 
     }

@@ -36,7 +36,11 @@ namespace SJIP_LIMMV1.Models
         [RegularExpression(regExrLMPD, ErrorMessage = "Please enter LMPD number start with 2 letters followed with 10 numbers")]
         public String LMPD { get; set; }
 
-        public PagedList<SearchDTO> PagedSensorBoxInfo { get; set; }
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+
+        public PagedList<SearchDTO> PagedSensorBoxInfo { get; set; }       
 
     }
 }

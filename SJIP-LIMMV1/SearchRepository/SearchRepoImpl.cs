@@ -16,11 +16,16 @@ namespace SJIP_LIMMV1.SearchRepository
     public class SearchRepoImpl:ISearchRepo
     {
         
-        LiftInstallationDataDBEntities1 db = new LiftInstallationDataDBEntities1();
+        Entities db = new Entities();
+
+        public async Task<IList> FindByIDAsync(int id)
+        {
+            return await db.SensorBoxInfoes.Where(x=>x.ID==id).Select(i => new { i.ID, i.TownCouncil, i.BlockNo, i.SIMCard, i.LMPD, i.PostalCode }).ToListAsync();
+        }
 
         public async Task<IList> GetAllQeuryResultAsync()        
         {
-            return await db.SensorBoxInfoes.Select(x => new { x.TownCouncil, x.BlockNo, x.SIMCard, x.LMPD }).ToListAsync();
+            return await db.SensorBoxInfoes.Select(x => new { x.ID,x.TownCouncil, x.BlockNo, x.SIMCard, x.LMPD,x.PostalCode }).ToListAsync();
         }
 
        
@@ -47,8 +52,9 @@ namespace SJIP_LIMMV1.SearchRepository
             {
                 predicate = predicate.And(i => i.LMPD.ToLower().StartsWith(searchViewModel.LMPD.Replace("\t", " ").Trim().ToLower()));
             }
+            //if(searchViewModel.)
             
-            return await db.SensorBoxInfoes.Where(predicate).Select(i => new { i.TownCouncil, i.BlockNo, i.SIMCard, i.LMPD }).ToListAsync();
+            return await db.SensorBoxInfoes.Where(predicate).Select(i => new { i.ID, i.TownCouncil, i.BlockNo, i.SIMCard, i.LMPD,i.PostalCode }).ToListAsync();
           
         }
 

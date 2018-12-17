@@ -11,6 +11,8 @@ namespace SJIP_LIMMV1.SearchRepository
 {
     public interface ISearchRepo
     {
+        Task<IList> FindByIDAsync(int id);
+
         Task<IList> GetAllQeuryResultAsync();
 
 

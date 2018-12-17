@@ -13,10 +13,10 @@ namespace SJIP_LIMMV1.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class LiftInstallationDataDBEntities1 : DbContext
+    public partial class Entities : DbContext
     {
-        public LiftInstallationDataDBEntities1()
-            : base("name=LiftInstallationDataDBEntities1")
+        public Entities()
+            : base("name=Entities")
         {
         }
     

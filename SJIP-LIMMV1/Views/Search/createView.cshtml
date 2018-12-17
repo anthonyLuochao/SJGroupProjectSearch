@@ -1,31 +1,63 @@
 ﻿@using PagedList.Mvc;
+@using SJIP_LIMMV1.Models;
 @model  SJIP_LIMMV1.Models.SearchViewModel
 @{
     ViewBag.Title = "CreateView";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@section scripts{
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#from")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        changeYear: true,
+                        numberOfMonths: 1,
+                        
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+    </script>
+}
 <style>
     .validationError {
         color: red;
     }
 </style>
 <head>
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-    @*<script src="~/Scripts/jquery.validate.js"></script>
-        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
-
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>   
 </head>
 
 <body>
     <div class="container body-content">
 
-
-
-
         <div class="container">
-
-
 
             <div class="row justify-content-start" style="padding-top:10px;">
                 <h1>Search Info</h1>
@@ -39,7 +71,7 @@
                         <div class="col-sm-12">
 
                             <div class="col-sm-3" style="padding-top:15px;">
-                                @Html.LabelFor(x=>x.TownCouncil)
+                                @Html.LabelFor(x => x.TownCouncil)
                             </div>
                             <div class="col-sm-9" style="padding-top:5px;">
                                 @Html.TextBoxFor(x => x.TownCouncil)
@@ -100,7 +132,22 @@
                     </div>
 
                 </div>
+                <div class="col-sm-12">
 
+                    <label>Select a date range: From</label>
+
+
+                    @Html.TextBoxFor(x => x.StartDate, new { id = "from", @class = "datepicker" })
+
+                    <label>To </label>
+
+                    @Html.TextBoxFor(x => x.EndDate, new { id = "to", @class = "datepicker" })
+
+                </div>
+
+                <div class="col-sm-12">
+                    @Html.ValidationMessageFor(x => x.LMPD, "", new { @class = "validationError" })
+                </div>
                 <div class="col-sm-12">
                     <span style="padding-top:10px;padding-bottom:10px; ">
 
@@ -114,19 +161,69 @@
                     </span>
                 </div>
             </form>
+            <datalist id="searchDataList">
+                @foreach (SearchDTO item in ViewBag.AllRecords)
+                {
+                    <option id="@item.ID"value="PostalCode:@item.PostalCode BlockNo:@item.BlockNo TownCouncil:@item.TownCouncil SIMCard:@item.SIMCard LMPD:@item.LMPD"></option>
+                }
+            </datalist>
+                <input id="inputText"type="text" list="searchDataList">
+            <button id="liveSearchBtn">Display Single Entry</button>
+
+                
+            
             <div class="col-sm-12" id="resultTable" style="padding-top:10px;">
-                @Html.Partial("_SearchResult", Model.PagedSensorBoxInfo)
+                      @Html.Partial("_SearchResult", (PagedList.PagedList<SearchDTO>)@ViewBag.InitPagedList)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+            </div>
+            
+            <div class="modal fade" id="MyModal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-header">
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                        <h4 id="ModalTitle">Sensor Box Info</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="popupform">
+                            <fieldset>
+
+                                <div class="form-group">
+                                    <label>PostalCode:</label>
+                                    <label class="form-control" id="popupformPostalCode"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label>BlockNo:</label>
+                                    <label class="form-control" id="popupformBlockNo"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label>TownCouncil:</label>
+                                    <label class="form-control" id="popupformTownCouncil"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label>SIMCard:</label>
+                                    <label class="form-control" id="popupformSIMCard"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label>LMPD:</label>
+                                    <label class="form-control" id="popupformLMPD"></label>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
-
 
     </div>
 </body>
 
-<script> 
+<script>
+
     function changePage() {
         var pageSize = $('#pageSizeDropdownList').val();
-           
+
         $.ajax({
             url: "/Search/PagedResult?Size=" + pageSize,
             type: 'GET',
@@ -141,8 +238,43 @@
             }
         });
     }
-  
+
     $(document).ready(function () {
+
+        $("#liveSearchBtn").click(function () {           
+            
+
+            var datalistOption = $("#searchDataList").children();
+            var inputText = $("#inputText").val();
+            var id = 0;
+            for (var i = 0; i < datalistOption.length; i++) {
+                var nodevalue = datalistOption[i].value;
+                if (nodevalue === inputText) {
+                    id = datalistOption[i].id;
+                }
+                }
+            $("#MyModal").modal('show'); 
+            $.ajax({
+                type: "GET",
+                url: "/Search/GetInfoById",
+                data: { 'id': id },
+                success: function (result) {
+                    debugger;
+                    popupform
+                    $("#popupformPostalCode").html(result.PostalCode);
+                    $("#popupformBlockNo").html(result.BlockNo);
+                    $("#popupformTownCouncil").html(result.TownCouncil);
+                    $("#popupformSIMCard").html(result.SIMCard);
+                    $("#popupformLMPD").html(result.LMPD);                   
+                      
+
+                },
+                error: function () {
+
+                    alert("GetInfoById ajax error")
+                }
+            });
+        })
         //jQuery used to direct each page number click to PagedResult action(searchController) and get back a partial view of data table
         $(document).on("click", "#contentPager a", function (e) {
             var page;
@@ -157,7 +289,7 @@
                 page = parseInt($(this).html());//get page number of the link later pass this param to controller
 
             }
-            
+
             var pageSize = $("#pageSizeDropdownList").val();
 
             $.ajax({
@@ -177,8 +309,6 @@
             });
             e.preventDefault();//disable default click event in order to only trigger ajax
         });
-
-        
 
         $("#search").click(function () {
             var form = $("#myForm");

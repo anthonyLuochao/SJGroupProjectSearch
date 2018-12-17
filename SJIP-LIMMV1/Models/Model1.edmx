@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LiftInstallationDataDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LiftInstallationDataDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="SensorBoxInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -16,12 +16,12 @@
           <Property Name="SIMCard" Type="varchar" MaxLength="40" />
           <Property Name="LMPD" Type="varchar" MaxLength="40" />
           <Property Name="BlockNo" Type="varchar" MaxLength="4" />
+          <Property Name="InstalledDate" Type="date" />
         </EntityType>
         <EntityContainer Name="LiftInstallationDataDBModelStoreContainer">
           <EntitySet Name="SensorBoxInfo" EntityType="Self.SensorBoxInfo" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LiftInstallationDataDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -36,6 +36,7 @@
           <Property Name="SIMCard" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="LMPD" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="BlockNo" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="InstalledDate" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="SensorBoxInfoes" EntityType="Self.SensorBoxInfo" />
@@ -49,6 +50,7 @@
           <EntitySetMapping Name="SensorBoxInfoes">
             <EntityTypeMapping TypeName="LiftInstallationDataDBModel.SensorBoxInfo">
               <MappingFragment StoreEntitySet="SensorBoxInfo">
+                <ScalarProperty Name="InstalledDate" ColumnName="InstalledDate" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TownCouncil" ColumnName="TownCouncil" />
                 <ScalarProperty Name="LiftNo" ColumnName="LiftNo" />

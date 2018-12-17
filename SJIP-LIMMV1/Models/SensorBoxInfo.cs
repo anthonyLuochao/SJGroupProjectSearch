@@ -21,5 +21,6 @@ namespace SJIP_LIMMV1.Models
         public string SIMCard { get; set; }
         public string LMPD { get; set; }
         public string BlockNo { get; set; }
+        public Nullable<System.DateTime> InstalledDate { get; set; }
     }
 }

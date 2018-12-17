@@ -1,55 +1,57 @@
-﻿
-@model PagedList.PagedList<SJIP_LIMMV1.Models.SearchDTO >
-@using PagedList.Mvc;
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<SJIP_LIMMV1.Models.SearchDTO>
 
 
 
-    <table class="table table-bordered">
-        <thead>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.First().TownCouncil)</th>
+            <th>@Html.DisplayNameFor(x => x.First().BlockNo)</th>
+            <th>@Html.DisplayNameFor(x => x.First().SIMCard)</th>
+            <th>@Html.DisplayNameFor(x => x.First().LMPD)</th>
+            <th>@Html.DisplayNameFor(x => x.First().PostalCode)</th>
+        </tr>
+    </thead>
+    <tbody id="SearchDetails">
+        @if (Model.Count() == 0)
+        {
             <tr>
-                <th>@Html.DisplayNameFor(x => x.First().TownCouncil)</th>
-                <th>@Html.DisplayNameFor(x => x.First().BlockNo)</th>
-                <th>@Html.DisplayNameFor(x => x.First().SIMCard)</th>
-                <th>@Html.DisplayNameFor(x => x.First().LMPD)</th>
-            </tr>
-        </thead>
-        <tbody id="SearchDetails">
-            @if (Model.Count() == 0)
-            {
-                <tr>
-                    <td style="border-bottom:hidden; border-left:hidden; border-right:hidden ">
-                        <p style="color:red;">No Record Found</p>
-                    </td>
-                </tr>
-            }
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(x => item.TownCouncil) </td>
-                    <td>@Html.DisplayFor(x => item.BlockNo) </td>
-                    <td>@Html.DisplayFor(x => item.SIMCard)</td>
-                    <td>@Html.DisplayFor(x => item.LMPD)</td>
-                </tr>
-
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td class="col-sm-12" style="border-bottom:hidden; border-left:hidden; border-right:hidden ">
-
-                    Number of record in a page:
-                    @Html.DropDownListFor(m => m.PageSize,
-Enumerable.Range(1, 10).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), new { id = "pageSizeDropdownList", onchange="changePage()" })
-
-                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
-                    of @Model.PageCount
-
+                <td style="border-bottom:hidden; border-left:hidden; border-right:hidden ">
+                    <p style="color:red;">No Record Found</p>
                 </td>
             </tr>
-        </tfoot>
-    </table>
+        }
 
-    <div id="contentPager" class="col-sm-12" style="text-align:center">
-        <p>@Html.PagedListPager(Model, page => Url.Action("PagedResult", new { page}))</p>
-    </div>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.TownCouncil) </td>
+                <td>@Html.DisplayFor(x => item.BlockNo) </td>
+                <td>@Html.DisplayFor(x => item.SIMCard)</td>
+                <td>@Html.DisplayFor(x => item.LMPD)</td>
+                <td>@Html.DisplayFor(x => item.PostalCode)</td>
+            </tr>
+
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="col-sm-12" style="border-bottom:hidden; border-left:hidden; border-right:hidden ">
+
+                Number of record in a page:
+                @Html.DropDownListFor(m => m.PageSize,
+Enumerable.Range(1, 10).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), new { id = "pageSizeDropdownList", onchange="changePage()" })
+
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+                of @Model.PageCount
+
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<div id="contentPager" class="col-sm-12" style="text-align:center">
+    <p>@Html.PagedListPager(Model, page => Url.Action("PagedResult", new { page }))</p>
+</div>
