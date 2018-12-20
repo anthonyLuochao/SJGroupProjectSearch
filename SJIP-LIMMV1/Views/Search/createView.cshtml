@@ -219,15 +219,6 @@
                     </span>
                 </div>
             </form>
-            <datalist id="searchDataList">
-                @foreach (SearchDTO item in ViewBag.AllRecords)
-                {
-                    <option id="@item.ID" value="@item.PostalCode,@item.BlockNo,@item.TownCouncil,@item.SIMCard,@item.LMPD"></option>
-                }
-            </datalist>
-            <input id="inputText" type="text" list="searchDataList">
-            <button id="liveSearchBtn">Display Single Entry</button>
-
             <div class="col-sm-12" id="resultTable" style="padding-top:10px;">
                 @Html.Partial("_SearchResult", (PagedList.PagedList<SearchDTO>)@ViewBag.InitPagedList)
             </div>
@@ -276,19 +267,17 @@
 
 
     <div class="autocomplete" style="width:320px;">
-        <input style="max-width: 380px;" id="myInput" type="text" name="myCountry" placeholder="type to search sensorBox Info">
+        <input style="max-width: 380px;" id="myInput" type="text"  placeholder="type to search sensorBox Info">
     </div>
-    <input type="submit">
-
-    <script>
-        
-
-        /*An array containing all the country names in the world:*/
-        //var countries = ["110110,JURONG,100,89310709183041-2712,LM1000001646", "110111,CLEMENTI,100,89310709183041-2713,LM1000001647", "110112,BUKIT,100,89310709183041-2714,LM1000001648", "110113,YISHUN,100,89310709183041-2715,LM1000001649", "110110,JURONG,101,89310709183041-2716,LM1000001650", "110111,JURONG,102,89310709183041-2717,LM1000001651", "110112,JURONG,103,89310709183041-2718,LM1000001652", "110113,JURONG,104,10010709183041-2719,LM1000001653", "222222,CLEMENTI,105,10010709183041-2720,LM1000001654", "222223,CLEMENTI,106,10010709183041-2721,LM1000001655"]
-
-        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-        
-    </script>
+    <input id="submitBtn" type="submit"> Maximum Number of Result Shown 
+    <select id="MaxSearchResult">
+        <option value="1">1</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+    </select>
+    
 </body>
 
 <script>
@@ -311,19 +300,22 @@
             a.setAttribute("style", " height: 300px; overflow-y: scroll;");
             /*append the DIV element as a child of the autocomplete container:*/
             this.parentNode.appendChild(a);
+            var maxResult = parseInt($("#MaxSearchResult").children("option:selected").val());
             //create a counter to count the number of matching results
             var matchingNo = 1;
             /*for each item in the array...*/
             for (i = 0; i < arr.length; i++) {
                 /*check if the item has the same letters as the text field value: and limit to matching return to first 5 items*/
-                if ((arr[i].toLowerCase().search(val.toLowerCase()) != -1) && (matchingNo <= 5)) {
+                if ((arr[i].toLowerCase().search(val.toLowerCase()) != -1) && (matchingNo <= maxResult)) {
                     //increase the matched result counter if matching found
                     matchingNo++;
                     /*create a DIV element for each matching element:*/
                     b = document.createElement("DIV");
                     //split option into sub array
                     var subArr = arr[i].split(",");
-                    for (var k = 0; k < subArr.length; k++) {
+                    //create new string for display in input box(id field removed from the original string)
+                    var newString = arr[i].substr(arr[i].indexOf(",") + 1);
+                    for (var k = 1; k < subArr.length; k++) {
                         var valStartPosition = subArr[k].toLowerCase().search(val.toLowerCase());
                         var subOptionString = "";
                         if (valStartPosition != -1) {
@@ -332,19 +324,21 @@
                             subOptionString += "<strong>" + subArr[k].substr(valStartPosition, val.length) + "</strong>";
                             subOptionString += subArr[k].substr(valStartPosition + val.length);
                         }
-                        //always display first 3 subOption if any part of the option contain search word
-                        else if (k <= 2) {
+                        //always display first 3 subOption(exclude ID field) if any part of the option contain search word
+                        else if (k <= 3) {
                             subOptionString = subArr[k];
                         }
                         //re-assemble option 
                         b.innerHTML += subOptionString + ",";
                     }
                     /*insert a input field that will hold the current array item's value:*/
-                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    b.innerHTML += "<input id='"+subArr[0]+"' type='hidden' value='" + newString + "'>";
                     /*execute a function when someone clicks on the item value (DIV element):*/
                     b.addEventListener("click", function (e) {
                         /*insert the value for the autocomplete text field:*/
                         inp.value = this.getElementsByTagName("input")[0].value;
+                        //insert ID to autocomplete name field
+                        inp.name = this.getElementsByTagName("input")[0].id;
                         /*close the list of autocompleted values,
                         (or any other open lists of autocompleted values:*/
                         closeAllLists();
@@ -432,20 +426,42 @@
 
     $(document).ready(function () {
 
+        $("#submitBtn").click(function () {
+            var id = $("#myInput").attr("name");
+            $("#MyModal").modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/Search/GetInfoById",
+                data: { 'id': id },
+                success: function (result) {
+                    debugger;
+                    //a returned SensorBox Json object used for render the pop-up modal       
+                    $("#popupformPostalCode").html(result.PostalCode);
+                    $("#popupformBlockNo").html(result.BlockNo);
+                    $("#popupformTownCouncil").html(result.TownCouncil);
+                    $("#popupformSIMCard").html(result.SIMCard);
+                    $("#popupformLMPD").html(result.LMPD);
+                },
+                error: function () {
+
+                    alert("autocomplete submitBtn click error")
+                }
+            });
+        });
+    
         $.ajax({
             type: "GET",
-            url: "/Search/LoadAutocompleteData",           
-            success: function (result) {             
+            url: "/Search/LoadAutocompleteData",
+            success: function (result) {
                 autocomplete(document.getElementById("myInput"), result);
-                debugger; 
+                debugger;
             },
             error: function () {
                 alert("autocomplete data loading error")
             }
-        });
+        });      
 
-        $("#liveSearchBtn").click(function () {           
-            
+        $("#liveSearchBtn").click(function () {  
 
             var datalistOption = $("#searchDataList").children();
             var inputText = $("#inputText").val();
@@ -457,7 +473,7 @@
                 if (nodeValue === inputText) {
                     id = datalistOption[i].id;
                 }
-                }
+            }
             $("#MyModal").modal('show'); 
             $.ajax({
                 type: "GET",

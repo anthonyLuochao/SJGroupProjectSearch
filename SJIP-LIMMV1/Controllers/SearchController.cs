@@ -11,6 +11,7 @@ using AutoMapper;
 using SJIP_LIMMV1;
 using SJIP_LIMMV1.Services;
 using System.Collections;
+using System.Threading;
 
 namespace SJIP_LIMMV1.Controllers
 {
@@ -30,8 +31,7 @@ namespace SJIP_LIMMV1.Controllers
             searchViewModel = new SearchViewModel();
             ViewBag.InitPagedList =await searchService.LoadInitSearchPageAsync();       
             ViewBag.AllRecords= await searchService.LoadAllAsync();
-            currentSearchField = searchViewModel;
-           
+            currentSearchField = searchViewModel;           
             return View(searchViewModel);
         }
 
@@ -58,7 +58,6 @@ namespace SJIP_LIMMV1.Controllers
         {
             List<SearchDTO> result  =await searchService.FindByIDAsync(id);
             SearchDTO model = result.First();
-            
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -67,8 +66,8 @@ namespace SJIP_LIMMV1.Controllers
         {
             List<SearchDTO> modelList = await searchService.LoadAllAsync();
             //call method to convert List<SearchDTO>
-            String[] arr = Helper.SearchHelper.ConvertListSearchDTOtoStringList(modelList); 
-
+            String[] arr = Helper.SearchHelper.ConvertListSearchDTOtoStringList(modelList);
+            Thread.Sleep(3000);
             return Json(arr, JsonRequestBehavior.AllowGet);
         }
     }
