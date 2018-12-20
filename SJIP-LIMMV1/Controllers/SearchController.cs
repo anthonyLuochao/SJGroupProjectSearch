@@ -10,7 +10,7 @@ using PagedList;
 using AutoMapper;
 using SJIP_LIMMV1;
 using SJIP_LIMMV1.Services;
-
+using System.Collections;
 
 namespace SJIP_LIMMV1.Controllers
 {
@@ -62,6 +62,14 @@ namespace SJIP_LIMMV1.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public async Task<JsonResult> LoadAutocompleteData()
+        {
+            List<SearchDTO> modelList = await searchService.LoadAllAsync();
+            //call method to convert List<SearchDTO>
+            String[] arr = Helper.SearchHelper.ConvertListSearchDTOtoStringList(modelList); 
 
+            return Json(arr, JsonRequestBehavior.AllowGet);
+        }
     }
 }

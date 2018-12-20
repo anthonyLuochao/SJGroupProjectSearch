@@ -26,5 +26,22 @@ namespace SJIP_LIMMV1.Helper
 
         }
 
+        static public String[] ConvertListSearchDTOtoStringList(List<SearchDTO> inputList)
+        {
+            String[] arr = new String[inputList.Count()];
+            for(int i=0;i<inputList.Count();i++)
+            {
+                
+                String option = inputList[i].ID.ToString()
+                    + "," + inputList[i].PostalCode.ToString()
+                    + "," + inputList[i].TownCouncil
+                    + "," + inputList[i].BlockNo
+                    + "," + inputList[i].SIMCard
+                    + "," + inputList[i].LMPD;
+                arr[i] = option;
+            }
+            return arr;
+        }
+
     }
 }

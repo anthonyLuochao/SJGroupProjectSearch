@@ -281,130 +281,136 @@
     <input type="submit">
 
     <script>
-        function autocomplete(inp, arr) {
-            /*the autocomplete function takes two arguments,
-            the text field element and an array of possible autocompleted values:*/
-            var currentFocus;
-            /*execute a function when someone writes in the text field:*/
-            inp.addEventListener("input", function (e) {
-                var a, b, i, val = this.value;
-                /*close any already open lists of autocompleted values*/
-                closeAllLists();
-                if (!val) { return false; }
-                currentFocus = -1;
-                /*create a DIV element that will contain the items (values):*/
-                a = document.createElement("DIV");
-                a.setAttribute("id", this.id + "autocomplete-list");
-                a.setAttribute("class", "autocomplete-items");
-                a.setAttribute("style", "width: 200px; height: 100px; overflow - y: scroll;");
-                /*append the DIV element as a child of the autocomplete container:*/
-                this.parentNode.appendChild(a);
-
-                /*for each item in the array...*/
-                for (i = 0; i < arr.length; i++) {
-                    /*check if the item has the same letters as the text field value:*/
-                    if (arr[i].toLowerCase().search(val.toLowerCase()) != -1) {
-                        /*create a DIV element for each matching element:*/
-                        b = document.createElement("DIV");
-                        //split option into sub array
-                        var subArr = arr[i].split(",");
-                        for (var k = 0; k < subArr.length; k++) {
-                            var valStartPosition = subArr[k].toLowerCase().search(val.toLowerCase());
-                            var subOptionString = "";
-                            if (valStartPosition != -1) {
-                                /*make the matching letters bold:*/
-                                subOptionString = subArr[k].substr(0, valStartPosition);
-                                subOptionString += "<strong>" + subArr[k].substr(valStartPosition, val.length) + "</strong>";
-                                subOptionString += subArr[k].substr(valStartPosition + val.length);
-                            }
-                            //always display first 3 subOption if any part of the option contain search word
-                            else if (k <= 2) {
-                                subOptionString = subArr[k];
-                            }
-                            //re-assemble option
-                            b.innerHTML += subOptionString + ",";
-                        }
-                        /*insert a input field that will hold the current array item's value:*/
-                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                        /*execute a function when someone clicks on the item value (DIV element):*/
-                        b.addEventListener("click", function (e) {
-                            /*insert the value for the autocomplete text field:*/
-                            inp.value = this.getElementsByTagName("input")[0].value;
-                            /*close the list of autocompleted values,
-                            (or any other open lists of autocompleted values:*/
-                            closeAllLists();
-                        });
-
-                        a.appendChild(b);
-                    }
-                }
-            });
-            /*execute a function presses a key on the keyboard:*/
-            inp.addEventListener("keydown", function (e) {
-                var x = document.getElementById(this.id + "autocomplete-list");
-                if (x) x = x.getElementsByTagName("div");
-                if (e.keyCode == 40) {
-                    /*If the arrow DOWN key is pressed,
-                    increase the currentFocus variable:*/
-                    currentFocus++;
-                    /*and and make the current item more visible:*/
-                    addActive(x);
-                } else if (e.keyCode == 38) { //up
-                    /*If the arrow UP key is pressed,
-                    decrease the currentFocus variable:*/
-                    currentFocus--;
-                    /*and and make the current item more visible:*/
-                    addActive(x);
-                } else if (e.keyCode == 13) {
-                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
-                    e.preventDefault();
-                    if (currentFocus > -1) {
-                        /*and simulate a click on the "active" item:*/
-                        if (x) x[currentFocus].click();
-                    }
-                }
-            });
-            function addActive(x) {
-                /*a function to classify an item as "active":*/
-                if (!x) return false;
-                /*start by removing the "active" class on all items:*/
-                removeActive(x);
-                if (currentFocus >= x.length) currentFocus = 0;
-                if (currentFocus < 0) currentFocus = (x.length - 1);
-                /*add class "autocomplete-active":*/
-                x[currentFocus].classList.add("autocomplete-active");
-            }
-            function removeActive(x) {
-                /*a function to remove the "active" class from all autocomplete items:*/
-                for (var i = 0; i < x.length; i++) {
-                    x[i].classList.remove("autocomplete-active");
-                }
-            }
-            function closeAllLists(elmnt) {
-                /*close all autocomplete lists in the document,
-                except the one passed as an argument:*/
-                var x = document.getElementsByClassName("autocomplete-items");
-                for (var i = 0; i < x.length; i++) {
-                    if (elmnt != x[i] && elmnt != inp) {
-                        x[i].parentNode.removeChild(x[i]);
-                    }
-                }
-            }
-            /*execute a function when someone clicks in the document:*/
-            document.addEventListener("click", function (e) {
-                closeAllLists(e.target);
-            });
-        }
+        
 
         /*An array containing all the country names in the world:*/
-        var countries = ["110110,JURONG,100,89310709183041-2712,LM1000001646", "110111,CLEMENTI,100,89310709183041-2713,LM1000001647", "110112,BUKIT,100,89310709183041-2714,LM1000001648", "110113,YISHUN,100,89310709183041-2715,LM1000001649", "110110,JURONG,101,89310709183041-2716,LM1000001650", "110111,JURONG,102,89310709183041-2717,LM1000001651", "110112,JURONG,103,89310709183041-2718,LM1000001652", "110113,JURONG,104,10010709183041-2719,LM1000001653", "222222,CLEMENTI,105,10010709183041-2720,LM1000001654", "222223,CLEMENTI,106,10010709183041-2721,LM1000001655"]
+        //var countries = ["110110,JURONG,100,89310709183041-2712,LM1000001646", "110111,CLEMENTI,100,89310709183041-2713,LM1000001647", "110112,BUKIT,100,89310709183041-2714,LM1000001648", "110113,YISHUN,100,89310709183041-2715,LM1000001649", "110110,JURONG,101,89310709183041-2716,LM1000001650", "110111,JURONG,102,89310709183041-2717,LM1000001651", "110112,JURONG,103,89310709183041-2718,LM1000001652", "110113,JURONG,104,10010709183041-2719,LM1000001653", "222222,CLEMENTI,105,10010709183041-2720,LM1000001654", "222223,CLEMENTI,106,10010709183041-2721,LM1000001655"]
 
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-        autocomplete(document.getElementById("myInput"), countries);
+        
     </script>
 </body>
 
 <script>
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            //create a scroll bar for all items
+            a.setAttribute("style", " height: 300px; overflow-y: scroll;");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            //create a counter to count the number of matching results
+            var matchingNo = 1;
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item has the same letters as the text field value: and limit to matching return to first 5 items*/
+                if ((arr[i].toLowerCase().search(val.toLowerCase()) != -1) && (matchingNo <= 5)) {
+                    //increase the matched result counter if matching found
+                    matchingNo++;
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    //split option into sub array
+                    var subArr = arr[i].split(",");
+                    for (var k = 0; k < subArr.length; k++) {
+                        var valStartPosition = subArr[k].toLowerCase().search(val.toLowerCase());
+                        var subOptionString = "";
+                        if (valStartPosition != -1) {
+                            /*make the matching letters bold:*/
+                            subOptionString = subArr[k].substr(0, valStartPosition);
+                            subOptionString += "<strong>" + subArr[k].substr(valStartPosition, val.length) + "</strong>";
+                            subOptionString += subArr[k].substr(valStartPosition + val.length);
+                        }
+                        //always display first 3 subOption if any part of the option contain search word
+                        else if (k <= 2) {
+                            subOptionString = subArr[k];
+                        }
+                        //re-assemble option 
+                        b.innerHTML += subOptionString + ",";
+                    }
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+
+                    a.appendChild(b);
+
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
 
     function changePage() {
         var pageSize = $('#pageSizeDropdownList').val();
@@ -425,6 +431,18 @@
     }
 
     $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "/Search/LoadAutocompleteData",           
+            success: function (result) {             
+                autocomplete(document.getElementById("myInput"), result);
+                debugger; 
+            },
+            error: function () {
+                alert("autocomplete data loading error")
+            }
+        });
 
         $("#liveSearchBtn").click(function () {           
             
