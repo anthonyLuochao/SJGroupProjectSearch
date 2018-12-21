@@ -16,21 +16,16 @@ using System.Threading;
 namespace SJIP_LIMMV1.Controllers
 {
     public class SearchController : Controller
-    {
-        
+    {        
         static SearchViewModel currentSearchField=new SearchViewModel();//current search returned result
         SearchViewModel searchViewModel;
-
-        ISearchService searchService=new SearchServiceImpl();
-
-        
+        ISearchService searchService=new SearchServiceImpl();        
 
         // GET: Search
         public async Task<ActionResult> CreateView()
         {
             searchViewModel = new SearchViewModel();
-            ViewBag.InitPagedList =await searchService.LoadInitSearchPageAsync();       
-            ViewBag.AllRecords= await searchService.LoadAllAsync();
+            ViewBag.InitPagedList =await searchService.LoadInitSearchPageAsync();    
             currentSearchField = searchViewModel;           
             return View(searchViewModel);
         }
@@ -41,8 +36,7 @@ namespace SJIP_LIMMV1.Controllers
             searchViewModel = new SearchViewModel();
             currentSearchField = searchfield;
             searchViewModel.PagedSensorBoxInfo=await searchService.SearchByAllFieldAsync(null,null, searchfield);  
-            return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);                
-            
+            return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);            
         }
 
         [HttpGet]
@@ -64,10 +58,8 @@ namespace SJIP_LIMMV1.Controllers
         [HttpGet]
         public async Task<JsonResult> LoadAutocompleteData()
         {
-            List<SearchDTO> modelList = await searchService.LoadAllAsync();
-            //call method to convert List<SearchDTO>
-            String[] arr = Helper.SearchHelper.ConvertListSearchDTOtoStringList(modelList);
-            Thread.Sleep(3000);
+            List<SearchDTO> modelList = await searchService.LoadAllAsync();           
+            String[] arr = Helper.SearchHelper.ConvertListSearchDTOtoStringList(modelList);            
             return Json(arr, JsonRequestBehavior.AllowGet);
         }
     }

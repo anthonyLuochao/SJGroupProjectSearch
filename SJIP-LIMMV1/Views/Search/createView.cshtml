@@ -119,7 +119,7 @@
 <body>
     <div class="container body-content">
 
-        <div class="container">
+        <div id="container" class="container" style="display:none;">
 
             <div class="row justify-content-start" style="padding-top:10px;">
                 <h1>Search Info</h1>
@@ -196,16 +196,16 @@
                 </div>
                 @*<div class="col-sm-12">
 
-                        <label>Select a date range: From</label>
+                    <label>Select a date range: From</label>
 
 
-                        @Html.TextBoxFor(x => x.StartDate, new { id = "from", @class = "datepicker" })
+                    @Html.TextBoxFor(x => x.StartDate, new { id = "from", @class = "datepicker" })
 
-                        <label>To </label>
+                    <label>To </label>
 
-                        @Html.TextBoxFor(x => x.EndDate, new { id = "to", @class = "datepicker" })
+                    @Html.TextBoxFor(x => x.EndDate, new { id = "to", @class = "datepicker" })
 
-                    </div>*@
+                </div>*@
                 <div class="col-sm-12">
                     <span style="padding-top:10px;padding-bottom:10px; ">
 
@@ -223,46 +223,49 @@
                 @Html.Partial("_SearchResult", (PagedList.PagedList<SearchDTO>)@ViewBag.InitPagedList)
             </div>
 
-            <div class="modal fade" id="MyModal" role="dialog">
-                <div class="modal-dialog" style="background-color:white;">
-                    <div class="modal-header">
-                        <a href="#" class="close" data-dismiss="modal">&times;</a>
-                        <h4 id="ModalTitle">Sensor Box Info</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="popupform">
-                            <fieldset>
+        </div>
+        <div class="modal fade" id="MyModal" role="dialog">
+            <div class="modal-dialog" style="background-color:white;">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h4 id="ModalTitle">Sensor Box Info</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="popupform">
+                        <fieldset>
 
-                                <div class="form-group">
-                                    <label>PostalCode:</label>
-                                    <label class="form-control" id="popupformPostalCode"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label>BlockNo:</label>
-                                    <label class="form-control" id="popupformBlockNo"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label>TownCouncil:</label>
-                                    <label class="form-control" id="popupformTownCouncil"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label>SIMCard:</label>
-                                    <label class="form-control" id="popupformSIMCard"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label>LMPD:</label>
-                                    <label class="form-control" id="popupformLMPD"></label>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+                            <div class="form-group">
+                                <label>PostalCode:</label>
+                                <label class="form-control" id="popupformPostalCode"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>BlockNo:</label>
+                                <label class="form-control" id="popupformBlockNo"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>TownCouncil:</label>
+                                <label class="form-control" id="popupformTownCouncil"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>SIMCard:</label>
+                                <label class="form-control" id="popupformSIMCard"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>LMPD:</label>
+                                <label class="form-control" id="popupformLMPD"></label>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
 
+    </div>
+    <div style="padding:15px">
+    <input type="submit" id="toggleBtn" onclick="toggleDisplay()" value="Show Filter" />
     </div>
 
 
@@ -281,6 +284,18 @@
 </body>
 
 <script>
+
+    function toggleDisplay() {
+        var x =document.getElementById("container");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            $("#toggleBtn").attr("value", "Hide Filter");
+        }
+        else  {
+            x.style.display = "none";
+            $("#toggleBtn").attr("value", "Show Filter");
+        }
+    }
     function autocomplete(inp, arr) {
         /*the autocomplete function takes two arguments,
         the text field element and an array of possible autocompleted values:*/
