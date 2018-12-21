@@ -29,7 +29,7 @@ namespace SJIP_LIMMV1.Services
             return searchDTO;
         }
 
-        public async Task<PagedList<SearchDTO>> LoadInitSearchPageAsync()
+        public async Task<PagedList<SearchDTO>> LoadInitSearchPagedListAsync()
         {
             IList queryResult = await searchRepo.GetAllQeuryResultAsync();
             List<SearchDTO> searchDTO = SearchHelper.ConvertQueryResultToSearchDTO(queryResult);

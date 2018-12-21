@@ -14,7 +14,7 @@ namespace SJIP_LIMMV1.Services
 
         Task<List<SearchDTO>> LoadAllAsync();
 
-        Task<PagedList<SearchDTO>> LoadInitSearchPageAsync();
+        Task<PagedList<SearchDTO>> LoadInitSearchPagedListAsync();
 
         Task<PagedList<SearchDTO>> SearchByAllFieldAsync(int? pageNumber, int? pageSize, SearchViewModel searchViewModel);
     }

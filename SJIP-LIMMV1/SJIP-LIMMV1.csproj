@@ -843,7 +843,6 @@
     <Content Include="Views\Shared\Info.cshtml" />
     <Content Include="Views\Search\createView.cshtml" />
     <Content Include="Views\Search\_SearchResult.cshtml" />
-    <Content Include="Views\Search\testScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

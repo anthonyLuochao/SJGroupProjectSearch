@@ -40,7 +40,5 @@ namespace SJIP_LIMMV1.Models
 
         public DateTime? EndDate { get; set; }
 
-        public PagedList<SearchDTO> PagedSensorBoxInfo { get; set; }       
-
     }
 }

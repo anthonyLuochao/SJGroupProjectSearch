@@ -25,7 +25,7 @@ namespace SJIP_LIMMV1.Controllers
         public async Task<ActionResult> CreateView()
         {
             searchViewModel = new SearchViewModel();
-            ViewBag.InitPagedList =await searchService.LoadInitSearchPageAsync();    
+            ViewBag.InitPagedList =await searchService.LoadInitSearchPagedListAsync();    
             currentSearchField = searchViewModel;           
             return View(searchViewModel);
         }
@@ -35,16 +35,16 @@ namespace SJIP_LIMMV1.Controllers
         {
             searchViewModel = new SearchViewModel();
             currentSearchField = searchfield;
-            searchViewModel.PagedSensorBoxInfo=await searchService.SearchByAllFieldAsync(null,null, searchfield);  
-            return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);            
+            PagedList<SearchDTO> model=await searchService.SearchByAllFieldAsync(null,null, searchfield);  
+            return PartialView("_SearchResult", model);            
         }
 
         [HttpGet]
         public async Task<ActionResult> PagedResult(int? page, int? size)
         {
             searchViewModel = new SearchViewModel();
-            searchViewModel.PagedSensorBoxInfo =await  searchService.SearchByAllFieldAsync(page, size, currentSearchField);
-            return PartialView("_SearchResult", searchViewModel.PagedSensorBoxInfo);           
+            PagedList<SearchDTO> model = await searchService.SearchByAllFieldAsync(page, size, currentSearchField);
+            return PartialView("_SearchResult", model);           
         }
 
         [HttpGet]
